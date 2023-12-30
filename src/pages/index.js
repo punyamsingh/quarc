@@ -1,50 +1,74 @@
 // index.js
 
-import { useState } from 'react';  // Import the useState hook
+import { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '@/styles/Home.module.css';
-import supabase from '@/sb/supabase'; // Update the path to your supabase.js file
+import supabase from '@/sb/supabase';
 
 export default function Home() {
-
-  const [text,setText] = useState('');  // Add a state variable for the textarea value
-
-  // const handleSave = async (text) => {
-  //   // Save text to Supabase
-  //   const { data,error } = await supabase
-  //     .from('snippets')
-  //     .insert([{ text },])
-  //     .select();
-
-  //   if (error) {
-  //     console.error('Error saving to Supabase:',error.message);
-  //     return;
-  //   }
-
-  //   // Redirect to the stored page with the unique id
-  //   const storedId = data[0].id;
-  //   window.location.href = `/stored/${storedId}`;
-  // };
+  const [text,setText] = useState('');
 
   const handleSave = async () => {
     try {
-      // Save text to Supabase
+      if (!text.trim()) {
+        alert('Please enter some text before saving.');
+        return;
+      }
+
       const { data,error } = await supabase
         .from('snippets')
-        .insert([{ text },])
-        .select();
+        .upsert([{ text }],{ returning: 'representation' });
 
       if (error) {
         console.error('Error saving to Supabase:',error.message);
         return;
       }
 
-      // Redirect to the stored page with the unique id
       const storedId = data[0].id;
       window.location.href = `/stored/${storedId}`;
     } catch (error) {
       console.error('Unhandled error:',error);
+    }
+  };
+
+  const handleSaveAs = async () => {
+    try {
+      if (!text.trim()) {
+        alert('Please enter some text before saving.');
+        return;
+      }
+
+      const customId = prompt('Enter a custom ID:');
+
+      if (!customId) {
+        alert('Invalid custom ID. Please enter a non-empty ID.');
+        return;
+      }
+
+      const { data: existingSnippet } = await supabase
+        .from('snippets')
+        .select('id')
+        .eq('id',customId)
+        .single();
+
+      if (existingSnippet) {
+        alert('A snippet with the provided ID already exists. Please choose a different ID.');
+        return;
+      }
+
+      const { error } = await supabase
+        .from('snippets')
+        .upsert([{ id: customId,text }]);
+
+      if (error) {
+        console.error('Error saving snippet with custom ID:',error.message);
+        return;
+      }
+
+      window.location.href = `/stored/${customId}`;
+    } catch (error) {
+      console.error('Unhandled error during save-as:',error.message);
     }
   };
 
@@ -72,10 +96,13 @@ export default function Home() {
             className={styles.textarea}
             placeholder="Paste your code here..."
             value={text}
-            onChange={(e) => setText(e.target.value)}  // Update the state on change
+            onChange={(e) => setText(e.target.value)}
           ></textarea>
           <button className={styles.button} onClick={handleSave}>
             Save
+          </button>
+          <button className={styles.button} onClick={handleSaveAs}>
+            Save As
           </button>
         </div>
       </main>
