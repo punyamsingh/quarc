@@ -1,9 +1,10 @@
-#### **Still under construction** ##
+#### Still under construction, use the link to test out the features and tell me what i can improve. I still haven't implemented everything yet. and don't even get me started on the frontend (rolls eyes) ##
+quarc.vercel.app
 
 # Q.U.A.R.C.
 ### Quick Universal Access for Retrieving Code
 
-![Quarc Logo](/public/logo.jpeg)
+![Quarc Logo](public/logo.jpeg)
 
 Quarc is a simple and efficient pastebin-like web application built with Next.js and integrated with Supabase for data storage. It allows users to quickly store and retrieve code snippets with ease.
 
