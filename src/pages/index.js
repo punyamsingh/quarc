@@ -5,6 +5,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styles from '@/styles/Home.module.css';
 import supabase from '@/sb/supabase';
+import Marquee from "react-fast-marquee";
 
 export default function Home() {
   const [text,setText] = useState('');
@@ -80,6 +81,14 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/apple-touch-icon.png" />
       </Head>
+      <Marquee
+        autoFill={true}
+        pauseOnHover={true}
+        gradient={true}
+        gradientColor={[255,255,0]}
+      >
+        <p>//// This webapp is under contruction //// </p>
+      </Marquee>
       <main className={styles.main}>
         <div className={styles.center}>
           <Image

@@ -4,6 +4,7 @@ import { useEffect,useState } from 'react';
 import Router from 'next/router';
 import TopLoadingBar from 'react-top-loading-bar';
 import supabase from '@/sb/supabase'; // Update the path to your supabase.js file
+import Marquee from "react-fast-marquee";
 
 export default function StoredPage({ storedText }) {
     const [text,setText] = useState(storedText);
@@ -40,7 +41,15 @@ export default function StoredPage({ storedText }) {
     return (
         <div>
             <TopLoadingBar progress={loadingBar} color="#0071ff" />
-            <h1>Stored Page</h1>
+            <Marquee
+                autoFill={true}
+                pauseOnHover={true}
+                gradient={true}
+                gradientColor={[255,255,0]}
+            >
+                <p>//// This webapp is under contruction //// </p>
+            </Marquee>
+            <h1 style={{ textAlign: 'center' }}>Stored Page</h1>
             <pre>{text}</pre>
         </div>
     );
