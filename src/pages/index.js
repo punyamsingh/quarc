@@ -18,9 +18,9 @@ export default function Home() {
         return;
       }
 
-      const { data, error } = await supabase
+      const { data:data2, error } = await supabase
       .from('snippets')
-      .upsert([{ text }], { returning: ['id'] });
+      .upsert([{ text }]).select('id').single();
 
 
       if (error) {
@@ -28,15 +28,13 @@ export default function Home() {
         return;
       }
       let storedId;  // Declare storedId outside the if block
-      console.log(data)
-      if (data && data.length > 0) {
-        const storedId = data[0].id;
-        // window.location.href = `/stored/${storedId}`;
+      console.log("data", data2)
+      if (data2) {
+        const storedId = data2.id;
+        window.location.href = `/stored/${storedId}`;
       } else {
         console.error('Unexpected response from Supabase: No data returned.');
       }
-
-      // window.location.href = `/stored/${storedId}`;
     } catch (error) {
       console.error('Unhandled error:',error);
     }
