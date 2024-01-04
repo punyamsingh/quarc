@@ -9,7 +9,8 @@ import Marquee from "react-fast-marquee";
 
 export default function Home() {
   const [text,setText] = useState('');
-
+  const [showSaveAsInput, setShowSaveAsInput] = useState(false); // New state
+  const [newNameError, setNewNameError] = useState(false);
   const handleSave = async () => {
     try {
       if (!text.trim()) {
@@ -17,17 +18,25 @@ export default function Home() {
         return;
       }
 
-      const { data,error } = await supabase
-        .from('snippets')
-        .upsert([{ text }],{ returning: 'representation' });
+      const { data, error } = await supabase
+      .from('snippets')
+      .upsert([{ text }], { returning: ['id'] });
+
 
       if (error) {
         console.error('Error saving to Supabase:',error.message);
         return;
       }
+      let storedId;  // Declare storedId outside the if block
+      console.log(data)
+      if (data && data.length > 0) {
+        const storedId = data[0].id;
+        // window.location.href = `/stored/${storedId}`;
+      } else {
+        console.error('Unexpected response from Supabase: No data returned.');
+      }
 
-      const storedId = data[0].id;
-      window.location.href = `/stored/${storedId}`;
+      // window.location.href = `/stored/${storedId}`;
     } catch (error) {
       console.error('Unhandled error:',error);
     }
@@ -40,17 +49,26 @@ export default function Home() {
         return;
       }
 
-      const customId = prompt('Enter a custom ID:');
+      setShowSaveAsInput(true); // Show the input area
+    } catch (error) {
+      console.error('Unhandled error during save-as:', error.message);
+    }
+  };
+  const handleSaveAsConfirm = async () => {
+    try {
+      const customId = document.getElementById('customIdInput').value;
 
       if (!customId) {
-        alert('Invalid custom ID. Please enter a non-empty ID.');
+        setNewNameError(true); // Trigger re-render to display error
         return;
+      } else {
+        setNewNameError(false); // Clear the error state if customId is provided
       }
 
       const { data: existingSnippet } = await supabase
         .from('snippets')
         .select('id')
-        .eq('id',customId)
+        .eq('id', customId)
         .single();
 
       if (existingSnippet) {
@@ -60,16 +78,16 @@ export default function Home() {
 
       const { error } = await supabase
         .from('snippets')
-        .upsert([{ id: customId,text }]);
+        .upsert([{ id: customId, text }]);
 
       if (error) {
-        console.error('Error saving snippet with custom ID:',error.message);
+        console.error('Error saving snippet with custom ID:', error.message);
         return;
       }
 
       window.location.href = `/stored/${customId}`;
     } catch (error) {
-      console.error('Unhandled error during save-as:',error.message);
+      console.error('Unhandled error during save-as:', error.message);
     }
   };
 
@@ -100,6 +118,22 @@ export default function Home() {
             priority
           />
         </div>
+        {/* Conditionally render the Save As input area */}
+        {showSaveAsInput && (
+          <div className={styles.customIdInputContainer}>
+            <textarea
+              id="customIdInput"
+              className={styles.customIdInput}
+              placeholder="Enter custom ID..."
+            />
+            <button className={styles.button} onClick={handleSaveAsConfirm}>
+              Confirm
+            </button>
+          </div>
+        )}
+        {newNameError && (
+        <p style={{ color: 'red' }}>Invalid custom ID. Please enter a non-empty ID.</p>
+      )}
         <div className={styles.container}>
           <textarea
             className={styles.textarea}

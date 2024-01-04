@@ -1,5 +1,4 @@
 // pages/stored/[id].js
-
 import { useEffect,useState } from 'react';
 import Router from 'next/router';
 import TopLoadingBar from 'react-top-loading-bar';
@@ -16,6 +15,7 @@ export default function StoredPage({ storedText }) {
             try {
                 setLoadingBar(30); // Start loading bar
                 const storedId = Router.query.id; // Use Router.query to get the ID
+                console.log(storedId)
                 const { data,error } = await supabase
                     .from('snippets')
                     .select('text')

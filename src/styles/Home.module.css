@@ -9,11 +9,14 @@
 .container {
   width: 100%;
   /* max-width: 600px; */
+  height: 100%;
   text-align: center;
+  margin-bottom: 20px;
   padding: 20px;
-  background: linear-gradient(to bottom,
+  background: rgba(var(--background-start-rgb), 0.5);
+  /* background: linear-gradient(to right,
       rgba(var(--background-start-rgb), 1),
-      rgba(var(--callout-rgb), 0.5));
+      rgba(var(--callout-rgb), 0.5)); */
   background-clip: padding-box;
   border-radius: var(--border-radius);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -22,18 +25,19 @@
 .textarea {
   width: 100%;
   padding: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   border: none;
   border-radius: var(--border-radius);
   background: rgba(var(--tile-start-rgb), 1);
   color: rgba(var(--foreground-rgb), 1);
   font-family: var(--font-mono);
   resize: none;
-  min-height: 350px;
+  min-height: calc(100% - 60px);;
 }
 
 .button {
   padding: 10px 20px;
+  height: 40px;
   border: none;
   border-radius: var(--border-radius);
   background: var(--cerulean);
@@ -45,4 +49,25 @@
 
 .button:hover {
   background: var(--indigo-dye);
+}
+
+
+/* Additional styles for Save As input */
+.customIdInputContainer {
+  display: flex;
+  flex-direction: row;
+  height: 60px;
+}
+
+.customIdInput {
+  width: calc(100% - 10px); /* Adjust width as needed */
+  padding: 10px;
+  border: none;
+  border-radius: var(--border-radius);
+  background: rgba(var(--tile-start-rgb), 1);
+  color: rgba(var(--foreground-rgb), 1);
+  font-family: var(--font-mono);
+  resize: none;
+  margin-bottom: 20px;
+  margin-right: 10px; /* Adjust margin as needed */
 }
