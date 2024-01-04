@@ -2,12 +2,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   height: 100vh;
 }
 
 .container {
   width: 100%;
-  max-width: 600px;
+  /* max-width: 600px; */
   text-align: center;
   padding: 20px;
   background: linear-gradient(to bottom,
@@ -28,7 +29,7 @@
   color: rgba(var(--foreground-rgb), 1);
   font-family: var(--font-mono);
   resize: none;
-  min-height: 200px;
+  min-height: 350px;
 }
 
 .button {
