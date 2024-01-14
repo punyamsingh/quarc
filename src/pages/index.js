@@ -43,7 +43,7 @@ export default function Home() {
   const handleSaveAs = async () => {
     try {
       if (!text.trim()) {
-        alert('Please enter some text before saving.');
+        alert('Please enter some text before saving. ');
         return;
       }
 
